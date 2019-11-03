@@ -1,4 +1,5 @@
 class No9527Controller < ApplicationController
+	protect_from_forgery with: :null_session
 
 	def eat
 		render plain: "工號9527餵您吃飯!"
@@ -34,5 +35,11 @@ class No9527Controller < ApplicationController
 		response = Net::HTTP.get(uri)
 		render plain: response
 	end
+
+
+	def webhook
+		head :ok
+	end
+
 
 end
