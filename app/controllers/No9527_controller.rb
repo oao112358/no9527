@@ -86,14 +86,12 @@ class No9527Controller < ApplicationController
 
 	# 關鍵字回覆
 	def keyword_reply(received_text)
-		# 學習紀錄表
-    keyword_mapping = {
-      'QQ' => '神曲支援：https://www.youtube.com/watch?v=T0LfHEwEXXw&feature=youtu.be&t=1m13s',
-      '我難過' => '神曲支援：https://www.youtube.com/watch?v=T0LfHEwEXXw&feature=youtu.be&t=1m13s'
-    }
-    
-    # 查表
-    keyword_mapping[received_text]
+		mapping = KeywordMapping.where(keyword: received_text).last
+    if mapping.nil?
+      nil
+    else
+      mapping.message
+    end
 	end
 
 end
