@@ -26,9 +26,13 @@ class No9527Controller < ApplicationController
 
 	def show_response_body
 		puts "9527躲在這兒A____A"
-		print "9527躲在這兒A____A"
-		p "9527躲在這兒A____A"
 		render plain: response.body
+	end
+
+	def sent_request
+		uri = URI('http://localhost:3000/no9527/response_body')
+		response = Net::HTTP.get(uri)
+		render plain: response
 	end
 
 end
