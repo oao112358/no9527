@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   
   get '/no9527/sent_request', to: 'no9527#sent_request'
 
-  post '/no9527/webhook', to: 'no9527#webhook'
-  
+  post '/no9527/webhook', to: 'no9527#webhook
+  resources :push_messages, only: [:new, :create]'
+
 end

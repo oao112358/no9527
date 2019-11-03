@@ -42,7 +42,10 @@ class No9527Controller < ApplicationController
 
 
 	def webhook
-		# 設定回覆文字
+		# 紀錄頻道
+		Channel.find_or_create_by(channel_id: channel_id)
+
+		# 關鍵字回覆
     reply_text = keyword_reply(received_text)
 	
 		# 傳送訊息
