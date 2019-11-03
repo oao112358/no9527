@@ -71,7 +71,7 @@ class No9527Controller < ApplicationController
 		# 設定回覆訊息
 		message = {
 			type: 'text',
-			text: 'reply_text'
+			text: reply_text
 		}
 
 		# 傳送訊息
