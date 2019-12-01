@@ -33,6 +33,7 @@ gem 'jbuilder', '~> 2.7'
 # ======= Line =======
 gem 'line-bot-api'
 gem 'nokogiri'
+gem 'rest-client'
 # ======= Line =======
 
 
