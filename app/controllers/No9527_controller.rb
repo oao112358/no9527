@@ -169,8 +169,8 @@ class No9527Controller < ApplicationController
 		 end
 		
 		# ====================查PTT====================
-		replay_text = eat(received_text)
-		 unless replay_text.nil?
+		reply_text = eat(received_text)
+		 unless reply_text.nil?
 			 response = reply_to_line(reply_text)
 			 head :ok
 			 return 
