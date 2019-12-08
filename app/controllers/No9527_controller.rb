@@ -69,7 +69,7 @@ class No9527Controller < ApplicationController
 		end
 
 		# render plain: rlt
-		return rlt
+		return 'rlt'
 	end
 	def request_headers
 		# render plain: request.headers.to_h.keys.sort.join("\n")
