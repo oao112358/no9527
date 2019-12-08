@@ -32,7 +32,7 @@ class No9527Controller < ApplicationController
 	end
 
 	def eat(kanban)
-		return nil unless received_text.include? 'Baseball'
+		return nil unless kanban.include? 'Baseball'
 
 		yesterday = Time.now - 1.day
 		yesterdayFormat = yesterday.strftime('%Y/%m/%d')
@@ -69,7 +69,7 @@ class No9527Controller < ApplicationController
 		end
 
 		# render plain: rlt
-		return 'rlt'
+		return rlt
 	end
 	def request_headers
 		# render plain: request.headers.to_h.keys.sort.join("\n")
