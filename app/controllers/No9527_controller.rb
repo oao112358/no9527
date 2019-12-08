@@ -68,7 +68,8 @@ class No9527Controller < ApplicationController
 			rlt << i[:popularity] + ' [' + i[:date] + '] ' + i[:title] + "\n" + i[:url] + "\n\n"
 		end
 
-		render plain: 'Baseball QQQQQ'
+		# render plain: rlt
+		return rlt
 	end
 	def request_headers
 		# render plain: request.headers.to_h.keys.sort.join("\n")
