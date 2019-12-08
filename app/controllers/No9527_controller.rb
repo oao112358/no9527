@@ -170,7 +170,7 @@ class No9527Controller < ApplicationController
 		
 		# ====================查PTT====================
 		replay_text = eat(received_text)
-		 unless reply_image.nil?
+		 unless replay_text.nil?
 			 response = reply_to_line(reply_text)
 			 head :ok
 			 return 
