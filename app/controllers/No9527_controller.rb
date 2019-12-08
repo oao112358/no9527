@@ -6,8 +6,69 @@ require 'open-uri'
 class No9527Controller < ApplicationController
 	protect_from_forgery with: :null_session
 
-	def eat
-		render plain: "工號9527餵您吃飯!"
+	def getDataByUrl(url)
+		doc = Nokogiri::HTML(open(url))
+		domain = 'https://www.ptt.cc'
+		yesterday = Date.yesterday.strftime('%Y')
+		list = []
+		
+		xmlDoc = doc.css('div.r-ent')	
+		size = xmlDoc.length
+		xmlDoc.each do |element|
+			unless element.css('div.title').text.include? '本文已被刪除'
+				# 避免月份為個位數的bug
+				date = element.css('div [class=date]').text
+				date.sub!(' ', '0')
+				list << {
+					popularity: element.css('span').text,
+					date: yesterday + '/' + date,
+					author: element.css('div.meta div.author').text,
+					title: element.css('div.title a').text,
+					url: domain + element.css('div.title a').attribute('href').to_s
+				}
+			end
+		end
+		return list
+	end
+
+	def eat(kanban)
+		return nil unless received_text.include? 'Baseball'
+
+		yesterday = Time.now - 1.day
+		yesterdayFormat = yesterday.strftime('%Y/%m/%d')
+		# kanban = 'Baseball'
+		url = 'https://www.ptt.cc/bbs/' + kanban + '/index.html'
+		doc = Nokogiri::HTML(open(url))
+		domain = 'https://www.ptt.cc'
+		secondPageUrl = doc.at_css('#action-bar-container > div > div.btn-group.btn-group-paging > a:nth-child(2)')['href']
+		lastPage = secondPageUrl[secondPageUrl.index('index') + 5 .. -6].to_i + 1
+		
+		allData = []
+		# 取得預設頁數內的所有文章
+		(lastPage - 20 .. lastPage).each do |i|
+			tempUrl = ''
+			tempUrl = 'https://www.ptt.cc/bbs/' + kanban + '/index' + i.to_s + '.html'
+			allData = allData + getDataByUrl(tempUrl)
+		end
+
+		# 篩選出昨天的所有文章
+		dateFilter = allData.select { |item| item[:date] == yesterdayFormat}
+		redPopFilter = dateFilter.select { |item| item[:popularity] == '爆' }
+		
+		popFilterSize = 2 - redPopFilter.size
+		popFilter = dateFilter.select { |item| item[:popularity] != '爆' && item[:popularity] != '' }
+													.reject { |item| item[:popularity].include?'X' }
+													.sort_by { |item| -item[:popularity].to_i }
+
+		outputList = redPopFilter.size >= 3 ? redPopFilter : redPopFilter + popFilter[0 .. popFilterSize]
+		
+		# 組成送出的字串
+		rlt = ''
+		outputList.each do |i|
+			rlt << i[:popularity] + ' [' + i[:date] + '] ' + i[:title] + "\n" + i[:url] + "\n\n"
+		end
+
+		render plain: rlt
 	end
 	def request_headers
 		# render plain: request.headers.to_h.keys.sort.join("\n")
@@ -80,7 +141,40 @@ class No9527Controller < ApplicationController
     response = line.reply_message(reply_token, message)
   end
 
+	# 查天氣
+	def get_weather(received_text)
+    return nil unless received_text.include? '天氣'
+		
+		# 用RestClient取HTML的body
+		url = 'https://www.ptt.cc/bbs/Baseball/index.html'
+		doc_KHH = Nokogiri::HTML(open(url))
+		puts doc_KHH
+		render plain: doc_KHH
+	end
+
 	def webhook
+		# ====================查天氣====================
+		 reply_image = get_weather(received_text)
+
+		 # 有查到的話 後面的事情就不作了
+		 unless reply_image.nil?
+			 # 傳送訊息到 line
+			#  response = reply_image_to_line(reply_image)
+ 
+			 # 回應 200
+			 head :ok
+ 
+			 return 
+		 end
+		
+		# ====================查PTT====================
+		replay_text = eat(received_text)
+		 unless reply_image.nil?
+			 response = reply_to_line(reply_text)
+			 head :ok
+			 return 
+		 end
+
 		# 設定回覆文字
 		reply_text = keyword_reply(received_text)
 
@@ -92,79 +186,4 @@ class No9527Controller < ApplicationController
 	end 
 
 
-
-
-
-	# def webhook
-	# 	# 查天氣
-  #   # reply_image = get_weather(received_text)
-
-  #   # 有查到的話 後面的事情就不作了
-  #   # unless reply_image.nil?
-  #   #   # 傳送訊息到 line
-  #   #   response = reply_image_to_line(reply_image)
-
-  #   #   # 回應 200
-  #   #   head :ok
-
-  #   #   return 
-  #   # end
-		
-	# 	# 紀錄頻道
-	# 	# Channel.find_or_create_by(channel_id: channel_id)
-
-	# 	# 關鍵字回覆
-  #   # reply_text = keyword_reply(received_text)
-	
-	# 	# 傳送訊息
-	# 	# response = reply_to_line(reply_text)
-			
-	# 	# 回應 200
-	# 	head :ok
-	# end
-
-	# # 傳送訊息到 line
-	# def reply_to_line(reply_text)
-	# 	return nil if reply_text.nil?
-		
-	# 	# 取得 reply token
-	# 	reply_token = params['events'][0]['replyToken']
-		
-	# 	# 設定回覆訊息
-	# 	message = {
-	# 		type: 'text',
-	# 		text: reply_text
-	# 	}
-
-	# 	# 傳送訊息
-	# 	line.reply_message(reply_token, message)
-  # end
-
-	# # 取得對方說的話
-	# def received_text
-	# 	message = params['events'][0]['message']
-  #   message['text'] unless message.nil?
-	# end
-
-	# # 關鍵字回覆
-	# def keyword_reply(received_text)
-	# 	mapping = KeywordMapping.where(keyword: received_text).last
-  #   if mapping.nil?
-  #     nil
-  #   else
-  #     mapping.message
-  #   end
-	# end
-
-	# # 查天氣
-	# # def get_weather(received_text)
-	# def get_weather
-  #   # return nil unless received_text.include? '天氣'
-		
-	# 	# 用RestClient取HTML的body
-	# 	url = 'https://www.ptt.cc/bbs/Baseball/index.html'
-	# 	doc_KHH = Nokogiri::HTML(open(url))
-	# 	puts doc_KHH
-	# 	render plain: doc_KHH
-	# end
 end
