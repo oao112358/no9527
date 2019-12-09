@@ -42,15 +42,16 @@ class No9527Controller < ApplicationController
 	def time()
 		rlt = Time.now
 		rltFormat = rlt.strftime('%Y/%m/%d %h/%m/%s')
-	return rltFormat
+		return rltFormat
+	end
 
 	def eat(kanban)
 	# def eat()
+		# kanban = 'sex'
 		kanbanList = ['Gossiping', 'C_Chat', 'Stock', 'Baseball', 'Lifeismoney',
 									'sex', 'LOL', 'movie', 'marriage', 'car', 'Beauty', 'WomenTalk',
 									'Boy-Girl', 'Japan_Travel', 'marvel', 'japanavgirls', 'Kaohsiung']
 		return nil unless kanbanList.any? { |i| kanban.include? i }
-		# kanban = 'sex'
 		yesterday = Time.now - 1.day
 		yesterdayFormat = yesterday.strftime('%Y/%m/%d')
 		
@@ -194,20 +195,25 @@ class No9527Controller < ApplicationController
 		 end
 		
 		# ====================查PTT====================
-		reply_text = eat(received_text)
-		unless reply_text.nil?
+		kanbanList = ['Gossiping', 'C_Chat', 'Stock', 'Baseball', 'Lifeismoney',
+									'sex', 'LOL', 'movie', 'marriage', 'car', 'Beauty', 'WomenTalk',
+									'Boy-Girl', 'Japan_Travel', 'marvel', 'japanavgirls', 'Kaohsiung']
+		if(kanbanList.any? { |i| received_text.include? i })
+			reply_text = eat(received_text)
+			# unless reply_text.nil?
 			response = reply_to_line(reply_text)
 			head :ok
 			return 
+			# end
 		end
 
 		if(received_text.include? '時間')
 			reply_text = time(received_text)
-			unless reply_text.nil?
-				response = reply_to_line(reply_text)
-				head :ok
-				return 
-			end
+			# unless reply_text.nil?
+			response = reply_to_line(reply_text)
+			head :ok
+			return 
+			# end
 		end
 
 		# 設定回覆文字
