@@ -7,7 +7,15 @@ class No9527Controller < ApplicationController
 	protect_from_forgery with: :null_session
 
 	def getDataByUrl(url)
-		doc = Nokogiri::HTML(open(url))
+		doc = ''
+		if(['Beauty', 'sex', 'Gossiping'].any? { |i| url.include? i })
+			raw_cookie = { over18: '1' }
+			cookie = raw_cookie.to_a.map {|key,val| "%s=%s" % [key, val]}.join '; '
+			doc = Nokogiri::HTML(open(url, "Cookie" => cookie))
+		else
+			doc = Nokogiri::HTML(open(url))
+		end
+
 		domain = 'https://www.ptt.cc'
 		yesterday = Date.yesterday.strftime('%Y')
 		list = []
@@ -15,7 +23,7 @@ class No9527Controller < ApplicationController
 		xmlDoc = doc.css('div.r-ent')	
 		size = xmlDoc.length
 		xmlDoc.each do |element|
-			unless element.css('div.title').text.include? '本文已被刪除'
+			unless element.css('div.title a').attribute('href').to_s == ''
 				# 避免月份為個位數的bug
 				date = element.css('div [class=date]').text
 				date.sub!(' ', '0')
@@ -32,13 +40,25 @@ class No9527Controller < ApplicationController
 	end
 
 	def eat(kanban)
-		return nil unless kanban.include? 'Baseball'
-
+	# def eat()
+		kanbanList = ['Gossiping', 'C_Chat', 'Stock', 'Baseball', 'Lifeismoney',
+									'sex', 'LOL', 'movie', 'marriage', 'car', 'Beauty', 'WomenTalk',
+									'Boy-Girl', 'Japan_Travel', 'marvel', 'japanavgirls', 'Kaohsiung']
+		return nil unless kanbanList.any? { |i| kanban.include? i }
+		# kanban = 'sex'
 		yesterday = Time.now - 1.day
 		yesterdayFormat = yesterday.strftime('%Y/%m/%d')
-		# kanban = 'Baseball'
+		
 		url = 'https://www.ptt.cc/bbs/' + kanban + '/index.html'
-		doc = Nokogiri::HTML(open(url))
+		if(['Beauty', 'sex', 'Gossiping'].any? { |i| kanban.include? i })
+			# 處理滿18歲的驗證
+			raw_cookie = { over18: '1' }
+			cookie = raw_cookie.to_a.map {|key,val| "%s=%s" % [key, val]}.join '; '
+			doc = Nokogiri::HTML(open(url, "Cookie" => cookie))
+		else
+			doc = Nokogiri::HTML(open(url))
+		end
+
 		domain = 'https://www.ptt.cc'
 		secondPageUrl = doc.at_css('#action-bar-container > div > div.btn-group.btn-group-paging > a:nth-child(2)')['href']
 		lastPage = secondPageUrl[secondPageUrl.index('index') + 5 .. -6].to_i + 1
@@ -55,7 +75,7 @@ class No9527Controller < ApplicationController
 		dateFilter = allData.select { |item| item[:date] == yesterdayFormat}
 		redPopFilter = dateFilter.select { |item| item[:popularity] == '爆' }
 		
-		popFilterSize = 2 - redPopFilter.size
+		popFilterSize = 3 - redPopFilter.size
 		popFilter = dateFilter.select { |item| item[:popularity] != '爆' && item[:popularity] != '' }
 													.reject { |item| item[:popularity].include?'X' }
 													.sort_by { |item| -item[:popularity].to_i }
