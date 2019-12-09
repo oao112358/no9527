@@ -8,7 +8,7 @@ class No9527Controller < ApplicationController
 
 	def getDataByUrl(url)
 		doc = ''
-		if(['Beauty', 'sex', 'Gossiping'].any? { |i| url.include? i })
+		if(['Beauty', 'sex', 'Gossiping', 'japanavgirls'].any? { |i| url.include? i })
 			raw_cookie = { over18: '1' }
 			cookie = raw_cookie.to_a.map {|key,val| "%s=%s" % [key, val]}.join '; '
 			doc = Nokogiri::HTML(open(url, "Cookie" => cookie))
@@ -41,7 +41,7 @@ class No9527Controller < ApplicationController
 
 	def time()
 		rlt = Time.now
-		rltFormat = rlt.strftime('%Y/%m/%d %h/%m/%s')
+		rltFormat = rlt.strftime('%Y/%m/%d %H/%M/%S')
 		return rltFormat
 	end
 
@@ -86,7 +86,7 @@ class No9527Controller < ApplicationController
 													.reject { |item| item[:popularity].include?'X' }
 													.sort_by { |item| -item[:popularity].to_i }
 
-		outputList = redPopFilter.size >= 3 ? redPopFilter : redPopFilter + popFilter[0 .. popFilterSize]
+		outputList = redPopFilter.size >= 5 ? redPopFilter : redPopFilter + popFilter[0 .. popFilterSize]
 		
 		# 組成送出的字串
 		rlt = ''
