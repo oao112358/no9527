@@ -39,10 +39,11 @@ class No9527Controller < ApplicationController
 		return list
 	end
 
-	def time()
+	def currentTime()
 		rlt = Time.now
 		rltFormat = rlt.strftime('%Y/%m/%d %H/%M/%S')
-		return rltFormat
+		render plain: rltFormat
+		# return rltFormat
 	end
 
 	def eat(kanban)
@@ -207,8 +208,9 @@ class No9527Controller < ApplicationController
 			# end
 		end
 
-		if(received_text.include? '時間')
-			reply_text = time(received_text)
+		timeList = ['時間', '幾點', 'time']
+		if(timeList.any? { |i| received_text.include? i })
+			reply_text = currentTime(received_text)
 			# unless reply_text.nil?
 			response = reply_to_line(reply_text)
 			head :ok
