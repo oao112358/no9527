@@ -39,6 +39,11 @@ class No9527Controller < ApplicationController
 		return list
 	end
 
+	def time()
+		rlt = Time.now
+		rltFormat = rlt.strftime('%Y/%m/%d %h/%m/%s')
+	return rltFormat
+
 	def eat(kanban)
 	# def eat()
 		kanbanList = ['Gossiping', 'C_Chat', 'Stock', 'Baseball', 'Lifeismoney',
@@ -65,7 +70,7 @@ class No9527Controller < ApplicationController
 		
 		allData = []
 		# 取得預設頁數內的所有文章
-		(lastPage - 20 .. lastPage).each do |i|
+		(lastPage - 30 .. lastPage).each do |i|
 			tempUrl = ''
 			tempUrl = 'https://www.ptt.cc/bbs/' + kanban + '/index' + i.to_s + '.html'
 			allData = allData + getDataByUrl(tempUrl)
@@ -75,7 +80,7 @@ class No9527Controller < ApplicationController
 		dateFilter = allData.select { |item| item[:date] == yesterdayFormat}
 		redPopFilter = dateFilter.select { |item| item[:popularity] == '爆' }
 		
-		popFilterSize = 3 - redPopFilter.size
+		popFilterSize = 4 - redPopFilter.size
 		popFilter = dateFilter.select { |item| item[:popularity] != '爆' && item[:popularity] != '' }
 													.reject { |item| item[:popularity].include?'X' }
 													.sort_by { |item| -item[:popularity].to_i }
@@ -190,11 +195,20 @@ class No9527Controller < ApplicationController
 		
 		# ====================查PTT====================
 		reply_text = eat(received_text)
-		 unless reply_text.nil?
-			 response = reply_to_line(reply_text)
-			 head :ok
-			 return 
-		 end
+		unless reply_text.nil?
+			response = reply_to_line(reply_text)
+			head :ok
+			return 
+		end
+
+		if(received_text.include? '時間')
+			reply_text = time(received_text)
+			unless reply_text.nil?
+				response = reply_to_line(reply_text)
+				head :ok
+				return 
+			end
+		end
 
 		# 設定回覆文字
 		reply_text = keyword_reply(received_text)
