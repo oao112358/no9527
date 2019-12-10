@@ -43,7 +43,7 @@ class No9527Controller < ApplicationController
 		rlt = Time.now
 		rltFormat = rlt.strftime('%Y/%m/%d %H/%M/%S')
 		# render plain: rltFormat
-		return rltFormat
+		return 'rltFormat'
 	end
 
 	def eat(kanban)
