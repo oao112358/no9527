@@ -231,9 +231,9 @@ class No9527Controller < ApplicationController
 		 end
 		
 		# ====================查PTT====================
-		PTT_kanban = ptt_mapping(received_text)
-		if(PTT_kanban != nil)
-			reply_text = eat(PTT_kanban)
+		ptt_kanban = ptt_mapping(received_text)
+		if(ptt_kanban != nil)
+			reply_text = eat(ptt_kanban)
 			# unless reply_text.nil?
 			response = reply_to_line(reply_text)
 			head :ok
