@@ -43,7 +43,7 @@ class No9527Controller < ApplicationController
 		rlt = Time.now
 		rltFormat = rlt.strftime('%Y/%m/%d %H:%M:%S')
 		# render plain: rltFormat
-		return "現在時間：" + rltFormat
+		return "現在時間： " + rltFormat
 	end
 
 	def eat(kanban)
@@ -93,7 +93,7 @@ class No9527Controller < ApplicationController
 		# 組成送出的字串
 		rlt = ''
 		outputList.each do |i|
-			rlt << i[:popularity] + ' [' + i[:date] + '] ' + i[:title] + "\n" + i[:url] + "\n\n"
+			rlt << kanban + "\n\n" + i[:popularity] + ' [' + i[:date] + '] ' + i[:title] + "\n" + i[:url] + "\n\n"
 		end
 
 		# render plain: rlt
