@@ -91,9 +91,9 @@ class No9527Controller < ApplicationController
 		outputList = redPopFilter.size >= 5 ? redPopFilter[0 .. 4] : redPopFilter + popFilter[0 .. popFilterSize]
 		
 		# 組成送出的字串
-		rlt = ''
+		rlt = kanban + "\n\n"
 		outputList.each do |i|
-			rlt << kanban + "\n\n" + i[:popularity] + ' [' + i[:date] + '] ' + i[:title] + "\n" + i[:url] + "\n\n"
+			rlt << i[:popularity] + ' [' + i[:date] + '] ' + i[:title] + "\n" + i[:url] + "\n\n"
 		end
 
 		# render plain: rlt
