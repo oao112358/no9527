@@ -23,7 +23,7 @@ class No9527Controller < ApplicationController
 		xmlDoc = doc.css('div.r-ent')	
 		size = xmlDoc.length
 		xmlDoc.each do |element|
-			unless element.css('div.title a').attribute('href').to_s == ''
+			unless (element.css('span').text.include?'X') || (element.css('div.meta div.author').text == '-')
 				# 避免月份為個位數的bug
 				date = element.css('div [class=date]').text
 				date.sub!(' ', '0')
@@ -48,16 +48,17 @@ class No9527Controller < ApplicationController
 
 	def eat(kanban)
 	# def eat()
-		# kanban = 'sex'
+		# kanban = 'Gossiping'
 		kanbanList = ['Gossiping', 'C_Chat', 'Stock', 'Baseball', 'Lifeismoney',
 									'sex', 'LOL', 'movie', 'marriage', 'car', 'Beauty', 'WomenTalk',
 									'Boy-Girl', 'Japan_Travel', 'marvel', 'japanavgirls', 'Kaohsiung']
 		return nil unless kanbanList.any? { |i| kanban.include? i }
 		yesterday = Time.now - 1.day
+		todayFormat = Time.now.strftime('%Y/%m/%d')
 		yesterdayFormat = yesterday.strftime('%Y/%m/%d')
 		
 		url = 'https://www.ptt.cc/bbs/' + kanban + '/index.html'
-		if(['Beauty', 'sex', 'Gossiping'].any? { |i| kanban.include? i })
+		if(['Beauty', 'sex', 'Gossiping', 'japanavgirls'].any? { |i| kanban.include? i })
 			# 處理滿18歲的驗證
 			raw_cookie = { over18: '1' }
 			cookie = raw_cookie.to_a.map {|key,val| "%s=%s" % [key, val]}.join '; '
@@ -79,15 +80,15 @@ class No9527Controller < ApplicationController
 		end
 
 		# 篩選出昨天的所有文章
-		dateFilter = allData.select { |item| item[:date] == yesterdayFormat}
+		dateFilter = kanban == 'Gossiping' ? allData.select { |item| item[:date] == todayFormat} : allData.select { |item| item[:date] == yesterdayFormat}
 		redPopFilter = dateFilter.select { |item| item[:popularity] == '爆' }
 		
 		popFilterSize = 4 - redPopFilter.size
 		popFilter = dateFilter.select { |item| item[:popularity] != '爆' && item[:popularity] != '' }
-													.reject { |item| item[:popularity].include?'X' }
 													.sort_by { |item| -item[:popularity].to_i }
+													# .reject { |item| item[:popularity].include?'X' }
 
-		outputList = redPopFilter.size >= 5 ? redPopFilter : redPopFilter + popFilter[0 .. popFilterSize]
+		outputList = redPopFilter.size >= 5 ? redPopFilter[0 .. 4] : redPopFilter + popFilter[0 .. popFilterSize]
 		
 		# 組成送出的字串
 		rlt = ''
@@ -150,7 +151,41 @@ class No9527Controller < ApplicationController
     
     # 查表
     keyword_mapping[received_text]
-  end
+	end
+
+	# PTT關鍵字回覆
+	def ptt_mapping(received_text)
+		keyword_mapping = {
+      'Gossiping' => 'Gossiping', '八卦' => 'Gossiping',
+      'C_Chat' => 'C_Chat', '西洽' => 'C_Chat',
+      'NBA' => 'NBA',
+      'Lifeismoney' => 'Lifeismoney', '省錢' => 'Lifeismoney',
+      'Stock' => 'Stock', '股板' => 'Stock', '股票' => 'Stock',
+      'Baseball' => 'Baseball', '棒球' => 'Baseball',
+      'HatePolitics' => 'HatePolitics', '政黑' => 'HatePolitics',
+      'sex' => 'sex', '西斯' => 'sex',
+      'LoL' => 'LoL', 'LOL' => 'LoL',
+      'MobileComm' => 'MobileComm', '手機' => 'MobileComm',
+      'car' => 'car', '車板' => 'car',
+      'movie' => 'movie', '電影' => 'movie',
+      'Tech_Job' => 'Tech_Job', '科技' => 'Tech_Job',
+      'Beauty' => 'Beauty', '表特' => 'Beauty', '妹子' => 'Beauty',
+			'WomenTalk' => 'WomenTalk', '女孩' => 'WomenTalk',
+			'Boy-Girl' => 'Boy-Girl', '男女' => 'Boy-Girl',
+			'marvel' => 'marvel', '媽佛' => 'marvel',
+			'Japan_Travel' => 'Japan_Travel', '日旅' => 'Japan_Travel',
+			'marriage' => 'marriage', '婚姻' => 'marriage',
+			'Kaohsiung' => 'Kaohsiung', '高雄' => 'Kaohsiung',
+			'japanavgirls' => 'japanavgirls', 'AV' => 'japanavgirls',
+			'home-sale' => 'home-sale', '房屋' => 'home-sale',
+			'joke' => 'joke', '就可' => 'joke',
+			'StupidClown' => 'StupidClown', '笨板' => 'StupidClown',
+			'Salary' => 'Salary', '職場' => 'Salary', '薪水' => 'Salary',
+			'Steam' => 'Steam',
+		}
+		# 查表
+		keyword_mapping[received_text]
+	end
 
 	# 傳送訊息到 line
   def reply_to_line(reply_text)
@@ -196,11 +231,9 @@ class No9527Controller < ApplicationController
 		 end
 		
 		# ====================查PTT====================
-		kanbanList = ['Gossiping', 'C_Chat', 'Stock', 'Baseball', 'Lifeismoney',
-									'sex', 'LOL', 'movie', 'marriage', 'car', 'Beauty', 'WomenTalk',
-									'Boy-Girl', 'Japan_Travel', 'marvel', 'japanavgirls', 'Kaohsiung']
-		if(kanbanList.any? { |i| received_text.include? i })
-			reply_text = eat(received_text)
+		PTT_kanban = ptt_mapping(received_text)
+		if(PTT_kanban != nil)
+			reply_text = eat(PTT_kanban)
 			# unless reply_text.nil?
 			response = reply_to_line(reply_text)
 			head :ok
