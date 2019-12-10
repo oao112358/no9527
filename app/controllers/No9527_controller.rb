@@ -41,9 +41,9 @@ class No9527Controller < ApplicationController
 
 	def currentTime()
 		rlt = Time.now
-		rltFormat = rlt.strftime('%Y/%m/%d %H/%M/%S')
+		rltFormat = rlt.strftime('%Y/%m/%d %H:%M:%S')
 		# render plain: rltFormat
-		return rltFormat
+		return "現在時間：" + rltFormat
 	end
 
 	def eat(kanban)
