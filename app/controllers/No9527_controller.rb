@@ -53,9 +53,9 @@ class No9527Controller < ApplicationController
 									'sex', 'LOL', 'movie', 'marriage', 'car', 'Beauty', 'WomenTalk',
 									'Boy-Girl', 'Japan_Travel', 'marvel', 'japanavgirls', 'Kaohsiung']
 		return nil unless kanbanList.any? { |i| kanban.include? i }
-		Time.zone = "Taipei"
-		yesterday = Time.zone.now - 1.day
-		todayFormat = Time.zone.now.strftime('%Y/%m/%d')
+		today = Time.now + 8 * 60 * 60
+		yesterday = today - 1.day
+		todayFormat = today.strftime('%Y/%m/%d')
 		yesterdayFormat = yesterday.strftime('%Y/%m/%d')
 		
 		url = 'https://www.ptt.cc/bbs/' + kanban + '/index.html'
@@ -86,7 +86,7 @@ class No9527Controller < ApplicationController
 		if (['Gossiping', 'Stock'].any? { |i| kanban.include? i })
 			dateFilter = allData.select { |item| item[:date] == todayFormat }
 		else
-			allData.select { |item| item[:date] == yesterdayFormat}
+			dateFilter = allData.select { |item| item[:date] == yesterdayFormat}
 		end
 		redPopFilter = dateFilter.select { |item| item[:popularity] == '爆' }
 		
