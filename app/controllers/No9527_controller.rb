@@ -82,7 +82,12 @@ class No9527Controller < ApplicationController
 
 		# 篩選出昨天的所有文章
 		# dateFilter = kanban == 'Gossiping' ? allData.select { |item| item[:date] == todayFormat} : allData.select { |item| item[:date] == yesterdayFormat}
-		dateFilter = ['Gossiping', 'Stock'].include? kanban ? allData.select { |item| item[:date] == todayFormat} : allData.select { |item| item[:date] == yesterdayFormat}
+		dateFilter = []
+		if (['Gossiping', 'Stock'].any? { |i| kanban.include? i })
+			dateFilter = allData.select { |item| item[:date] == todayFormat }
+		else
+			allData.select { |item| item[:date] == yesterdayFormat}
+		end
 		redPopFilter = dateFilter.select { |item| item[:popularity] == '爆' }
 		
 		popFilterSize = 4 - redPopFilter.size
