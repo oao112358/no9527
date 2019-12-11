@@ -40,7 +40,7 @@ class No9527Controller < ApplicationController
 	end
 
 	def currentTime()
-		rlt = Time.now
+		rlt = Time.now + 8 * 60 * 60
 		rltFormat = rlt.strftime('%Y/%m/%d %H:%M:%S')
 		# render plain: rltFormat
 		return "現在時間： " + rltFormat
