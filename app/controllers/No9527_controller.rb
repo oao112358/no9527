@@ -53,8 +53,9 @@ class No9527Controller < ApplicationController
 									'sex', 'LOL', 'movie', 'marriage', 'car', 'Beauty', 'WomenTalk',
 									'Boy-Girl', 'Japan_Travel', 'marvel', 'japanavgirls', 'Kaohsiung']
 		return nil unless kanbanList.any? { |i| kanban.include? i }
-		yesterday = Time.now - 1.day
-		todayFormat = Time.now.strftime('%Y/%m/%d')
+		Time.zone = "Taipei"
+		yesterday = Time.zone.now - 1.day
+		todayFormat = Time.zone.now.strftime('%Y/%m/%d')
 		yesterdayFormat = yesterday.strftime('%Y/%m/%d')
 		
 		url = 'https://www.ptt.cc/bbs/' + kanban + '/index.html'
@@ -80,7 +81,8 @@ class No9527Controller < ApplicationController
 		end
 
 		# 篩選出昨天的所有文章
-		dateFilter = kanban == 'Gossiping' ? allData.select { |item| item[:date] == todayFormat} : allData.select { |item| item[:date] == yesterdayFormat}
+		# dateFilter = kanban == 'Gossiping' ? allData.select { |item| item[:date] == todayFormat} : allData.select { |item| item[:date] == yesterdayFormat}
+		dateFilter = ['Gossiping', 'Stock'].include? kanban ? allData.select { |item| item[:date] == todayFormat} : allData.select { |item| item[:date] == yesterdayFormat}
 		redPopFilter = dateFilter.select { |item| item[:popularity] == '爆' }
 		
 		popFilterSize = 4 - redPopFilter.size
