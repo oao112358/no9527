@@ -8,7 +8,7 @@ class No9527Controller < ApplicationController
 
 	def getDataByUrl(url)
 		doc = ''
-		if(['Beauty', 'sex', 'Gossiping', 'japanavgirls', 'LoL'].any? { |i| url.include? i })
+		if(['Beauty', 'sex', 'Gossiping', 'japanavgirls'].any? { |i| url.include? i })
 			raw_cookie = { over18: '1' }
 			cookie = raw_cookie.to_a.map {|key,val| "%s=%s" % [key, val]}.join '; '
 			doc = Nokogiri::HTML(open(url, "Cookie" => cookie))
@@ -49,17 +49,17 @@ class No9527Controller < ApplicationController
 	def eat(kanban)
 	# def eat()
 		# kanban = 'Gossiping'
-		kanbanList = ['Gossiping', 'C_Chat', 'Stock', 'Baseball', 'Lifeismoney',
-									'sex', 'LOL', 'movie', 'marriage', 'car', 'Beauty', 'WomenTalk',
-									'Boy-Girl', 'Japan_Travel', 'marvel', 'japanavgirls', 'Kaohsiung']
-		return nil unless kanbanList.any? { |i| kanban.include? i }
+		# kanbanList = ['Gossiping', 'C_Chat', 'Stock', 'Baseball', 'Lifeismoney',
+		# 							'sex', 'LoL', 'movie', 'marriage', 'car', 'Beauty', 'WomenTalk',
+		# 							'Boy-Girl', 'Japan_Travel', 'marvel', 'japanavgirls', 'Kaohsiung']
+		# return nil unless kanbanList.any? { |i| kanban.include? i }
 		today = Time.now + 8 * 60 * 60
 		yesterday = today - 1.day
 		todayFormat = today.strftime('%Y/%m/%d')
 		yesterdayFormat = yesterday.strftime('%Y/%m/%d')
 		
 		url = 'https://www.ptt.cc/bbs/' + kanban + '/index.html'
-		if(['Beauty', 'sex', 'Gossiping', 'japanavgirls', 'LoL'].any? { |i| kanban.include? i })
+		if(['Beauty', 'sex', 'Gossiping', 'japanavgirls'].any? { |i| kanban.include? i })
 			# 處理滿18歲的驗證
 			raw_cookie = { over18: '1' }
 			cookie = raw_cookie.to_a.map {|key,val| "%s=%s" % [key, val]}.join '; '
