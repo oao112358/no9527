@@ -8,7 +8,7 @@ class No9527Controller < ApplicationController
 
 	def getDataByUrl(url)
 		doc = ''
-		if(['Beauty', 'sex', 'Gossiping', 'japanavgirls'].any? { |i| url.include? i })
+		if(['Beauty', 'sex', 'Gossiping', 'japanavgirls', 'LoL'].any? { |i| url.include? i })
 			raw_cookie = { over18: '1' }
 			cookie = raw_cookie.to_a.map {|key,val| "%s=%s" % [key, val]}.join '; '
 			doc = Nokogiri::HTML(open(url, "Cookie" => cookie))
@@ -59,7 +59,7 @@ class No9527Controller < ApplicationController
 		yesterdayFormat = yesterday.strftime('%Y/%m/%d')
 		
 		url = 'https://www.ptt.cc/bbs/' + kanban + '/index.html'
-		if(['Beauty', 'sex', 'Gossiping', 'japanavgirls'].any? { |i| kanban.include? i })
+		if(['Beauty', 'sex', 'Gossiping', 'japanavgirls', 'LoL'].any? { |i| kanban.include? i })
 			# 處理滿18歲的驗證
 			raw_cookie = { over18: '1' }
 			cookie = raw_cookie.to_a.map {|key,val| "%s=%s" % [key, val]}.join '; '

@@ -15,4 +15,14 @@ class AlarmService
     }
     client.push_message('U06b94675c0efcc90bebb6ac357107c4e', message)
   end
+
+  def ptt(kanban)
+    service = PttService.new(kanban)
+    message = {
+      type: "text",
+      text: service.ptt
+    }
+    client.push_message('U06b94675c0efcc90bebb6ac357107c4e', message)
+  end
+
 end
