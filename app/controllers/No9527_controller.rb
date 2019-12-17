@@ -83,7 +83,7 @@ class No9527Controller < ApplicationController
 		# 篩選出昨天的所有文章
 		# dateFilter = kanban == 'Gossiping' ? allData.select { |item| item[:date] == todayFormat} : allData.select { |item| item[:date] == yesterdayFormat}
 		dateFilter = []
-		if (['Gossiping', 'Stock'].any? { |i| kanban.include? i })
+		if (['Gossiping', 'Stock', 'SportLottery'].any? { |i| kanban.include? i })
 			dateFilter = allData.select { |item| item[:date] == todayFormat }
 		else
 			dateFilter = allData.select { |item| item[:date] == yesterdayFormat}
@@ -167,17 +167,21 @@ class No9527Controller < ApplicationController
       'BabyMother' => 'BabyMother', '媽寶' => 'BabyMother',
       'Baseball' => 'Baseball', '棒球' => 'Baseball',
       'Beauty' => 'Beauty', '表特' => 'Beauty', '妹子' => 'Beauty',
-			'Boy-Girl' => 'Boy-Girl', '男女' => 'Boy-Girl',
+			'Boy-Girl' => 'Boy-Girl', 'bg' => 'Boy-Girl', 'BG' => 'Boy-Girl', '男女' => 'Boy-Girl',
 			'C_Chat' => 'C_Chat', '西洽' => 'C_Chat',
-			'creditcard' => 'creditcard', '卡版' => 'creditcard', '信用卡' => 'creditcard',
       'car' => 'car', '車板' => 'car',
+			'creditcard' => 'creditcard', '卡版' => 'creditcard', '信用卡' => 'creditcard',
+      'CVS' => 'CVS', 'cvs' => 'CVS', '超商' => 'CVS',
       'e-shopping' => 'e-shopping', '網購' => 'e-shopping',
 			'Finance' => 'Finance', '金融' => 'Finance', '財經' => 'Finance',
+			'Food' => 'Food', 'food' => 'Food', '美食' => 'Food',
       'Gossiping' => 'Gossiping', '八卦' => 'Gossiping',
       'HatePolitics' => 'HatePolitics', '政黑' => 'HatePolitics',
 			'home-sale' => 'home-sale', 'home' => 'home-sale', '房屋' => 'home-sale',
+			'HomeTeach' => 'HomeTeach', 'hometeach' => 'HomeTeach', '家教' => 'HomeTeach',
 			'Japan_Travel' => 'Japan_Travel', '日旅' => 'Japan_Travel',
 			'japanavgirls' => 'japanavgirls', 'AV' => 'japanavgirls',
+			'Japandrama' => 'Japandrama', 'japandrama' => 'Japandrama', '日劇' => 'Japandrama',
 			'joke' => 'joke', '就可' => 'joke',
 			'Kaohsiung' => 'Kaohsiung', '高雄' => 'Kaohsiung',
       'Lifeismoney' => 'Lifeismoney', '省錢' => 'Lifeismoney',
@@ -192,6 +196,7 @@ class No9527Controller < ApplicationController
       'sex' => 'sex', 'Sex' => 'sex', '西斯' => 'sex',
       'Stock' => 'Stock', '股板' => 'Stock', '股票' => 'Stock',
 			'Salary' => 'Salary', '職場' => 'Salary', '薪水' => 'Salary',
+			'SportLottery' => 'SportLottery', '運彩' => 'SportLottery',
 			'Steam' => 'Steam',
 			'StupidClown' => 'StupidClown', 'stupid' => 'StupidClown', '笨板' => 'StupidClown',
       'Tainan' => 'Tainan', '台南' => 'Tainan',
