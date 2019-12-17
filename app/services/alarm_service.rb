@@ -13,7 +13,7 @@ class AlarmService
       type: "text",
       text: "現在時間：#{Time.current} 趕快起床吧"
     }
-    client.push_message('U06b94675c0efcc90bebb6ac357107c4e', message)
+    client.push_message('C509a0f264fe54b6957e97e53251ae409', message)
   end
 
   def ptt(kanban)
@@ -22,7 +22,16 @@ class AlarmService
       type: "text",
       text: service.ptt
     }
-    client.push_message('U06b94675c0efcc90bebb6ac357107c4e', message)
+    client.push_message('C509a0f264fe54b6957e97e53251ae409', message)
+  end
+
+  def ptt_Lai(kanban)
+    service = PttService.new(kanban)
+    message = {
+      type: "text",
+      text: service.ptt
+    }
+    client.push_message('U2584df52f0d763c2ed68aea140533e0b', message)
   end
 
 end

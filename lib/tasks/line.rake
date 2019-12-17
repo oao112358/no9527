@@ -39,27 +39,47 @@ namespace :home do # 13:00
     AlarmService.new.ptt('home-sale')
   end
 end
+
+namespace :car do # 14:00
+  task car: :environment do
+    AlarmService.new.ptt('car')
+  end
+end
   
-namespace :bg do # 14:00
+namespace :bg do # 15:00
   task bg: :environment do
     AlarmService.new.ptt('Boy-Girl')
   end
 end
 
-namespace :sex do # 15:00
+namespace :sex do # 16:00
   task sex: :environment do
-    AlarmService.new.ptt('Sex')
+    AlarmService.new.ptt('sex')
   end
 end
   
-namespace :japanavgirls do # 16:00
-  task japanavgirls: :environment do
-    AlarmService.new.ptt('japanavgirls')
-  end
-end
-
 namespace :marvel do # 17:00
   task marvel: :environment do
     AlarmService.new.ptt('Marvel')
+  end
+end
+
+# ==============================================
+
+namespace :japan_Lai do # 09:00
+  task japan: :environment do
+    AlarmService.new.ptt_Lai('Japan_Travel')
+  end
+end
+
+namespace :marvel_Lai do # 11:00
+  task marvel: :environment do
+    AlarmService.new.ptt_Lai('marvel')
+  end
+end
+
+namespace :stupid_Lai do # 13:00
+  task stupid: :environment do
+    AlarmService.new.ptt_Lai('StupidClown')
   end
 end
