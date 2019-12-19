@@ -83,3 +83,9 @@ namespace :stupid_Lai do # 13:00
     AlarmService.new.ptt_Lai('StupidClown')
   end
 end
+
+namespace :happy_Lai do # Birthday
+  task happy: :environment do
+    AlarmService.new.happy
+  end
+end

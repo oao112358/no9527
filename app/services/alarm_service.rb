@@ -34,4 +34,12 @@ class AlarmService
     client.push_message('U2584df52f0d763c2ed68aea140533e0b', message)
   end
 
+  def happy
+    message = {
+      type: "text",
+      text: "小弟9527在此搶個頭香" + "\n" + "恭賀娘娘二十六歲誕辰紀念日" + "\n" + "祝賀娘娘福如東海，壽比南山"
+    }
+    client.push_message('U2584df52f0d763c2ed68aea140533e0b', message)
+  end
+
 end
