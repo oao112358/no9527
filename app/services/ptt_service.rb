@@ -68,7 +68,7 @@ class PttService
     
     allData = []
     # 取得預設頁數內的所有文章
-    (lastPage - 20 .. lastPage).each do |i|
+    (lastPage - 30 .. lastPage).each do |i|
       tempUrl = ''
       tempUrl = 'https://www.ptt.cc/bbs/' + kanban + '/index' + i.to_s + '.html'
       allData = allData + getDataByUrl(tempUrl)
