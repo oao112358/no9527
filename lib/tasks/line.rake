@@ -16,9 +16,9 @@ namespace :lol do # 09:00
   end
 end
  
-namespace :japan do # 10:00
-  task japan: :environment do
-    AlarmService.new.ptt('Japan_Travel')
+namespace :home do # 10:00
+  task home: :environment do
+    AlarmService.new.ptt('home-sale')
   end
 end
 
@@ -34,21 +34,21 @@ namespace :stock do # 12:00
   end
 end
 
-namespace :home do # 13:00
-  task home: :environment do
-    AlarmService.new.ptt('home-sale')
+namespace :nba do # 13:00
+  task nba: :environment do
+    AlarmService.new.ptt('NBA')
   end
 end
 
-namespace :car do # 14:00
-  task car: :environment do
-    AlarmService.new.ptt('car')
-  end
-end
-  
-namespace :bg do # 15:00
+namespace :bg do # 14:00
   task bg: :environment do
     AlarmService.new.ptt('Boy-Girl')
+  end
+end
+
+namespace :av do # 15:00
+  task av: :environment do
+    AlarmService.new.ptt('japanavgirls')
   end
 end
 

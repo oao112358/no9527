@@ -68,7 +68,7 @@ class PttService
     
     allData = []
     # 取得預設頁數內的所有文章
-    (lastPage - 30 .. lastPage).each do |i|
+    (lastPage - 20 .. lastPage).each do |i|
       tempUrl = ''
       tempUrl = 'https://www.ptt.cc/bbs/' + kanban + '/index' + i.to_s + '.html'
       allData = allData + getDataByUrl(tempUrl)
@@ -77,24 +77,25 @@ class PttService
     # 篩選出昨天的所有文章
     # dateFilter = kanban == 'Gossiping' ? allData.select { |item| item[:date] == todayFormat} : allData.select { |item| item[:date] == yesterdayFormat}
     dateFilter = []
-    if (['Gossiping', 'Stock'].any? { |i| kanban.include? i })
+    if (['Gossiping', 'NBA', 'Stock', 'SportLottery'].any? { |i| kanban.include? i })
       dateFilter = allData.select { |item| item[:date] == todayFormat }
     else
       dateFilter = allData.select { |item| item[:date] == yesterdayFormat}
     end
     redPopFilter = dateFilter.select { |item| item[:popularity] == '爆' }
     
-    popFilterSize = 4 - redPopFilter.size
+    popFilterSize = 2 - redPopFilter.size
     popFilter = dateFilter.select { |item| item[:popularity] != '爆' && item[:popularity] != '' }
                           .sort_by { |item| -item[:popularity].to_i }
                           # .reject { |item| item[:popularity].include?'X' }
 
-    outputList = redPopFilter.size >= 5 ? redPopFilter[0 .. 4] : redPopFilter + popFilter[0 .. popFilterSize]
+    outputList = redPopFilter.size >= 3 ? redPopFilter[0 .. 2] : redPopFilter + popFilter[0 .. popFilterSize]
     
     # 組成送出的字串
     rlt = kanban + "\n\n"
     outputList.each do |i|
-      rlt << i[:popularity] + ' [' + i[:date] + '] ' + i[:title] + "\n" + i[:url] + "\n\n"
+      rlt << i[:popularity] + ' ' + i[:title] + "\n" + i[:url] + "\n\n"
+      # rlt << i[:popularity] + ' [' + i[:date] + '] ' + i[:title] + "\n" + i[:url] + "\n\n"
     end
 
     return rlt

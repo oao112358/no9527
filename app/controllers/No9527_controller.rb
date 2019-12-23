@@ -83,7 +83,7 @@ class No9527Controller < ApplicationController
 		# 篩選出昨天的所有文章
 		# dateFilter = kanban == 'Gossiping' ? allData.select { |item| item[:date] == todayFormat} : allData.select { |item| item[:date] == yesterdayFormat}
 		dateFilter = []
-		if (['Gossiping', 'Stock', 'SportLottery'].any? { |i| kanban.include? i })
+		if (['Gossiping', 'NBA', 'Stock', 'SportLottery'].any? { |i| kanban.include? i })
 			dateFilter = allData.select { |item| item[:date] == todayFormat }
 		else
 			dateFilter = allData.select { |item| item[:date] == yesterdayFormat}
@@ -191,7 +191,7 @@ class No9527Controller < ApplicationController
 			'MH' => 'MH', '魔物' => 'MH', '狩獵' => 'MH',
       'MobileComm' => 'MobileComm', '手機' => 'MobileComm',
       'movie' => 'movie', '電影' => 'movie',
-      'NBA' => 'NBA',
+      'NBA' => 'NBA', 'nba' => 'NBA',
       'PC_Shopping' => 'PC_Shopping', '電蝦' => 'PC_Shopping',
       'sex' => 'sex', 'Sex' => 'sex', '西斯' => 'sex',
       'Stock' => 'Stock', '股板' => 'Stock', '股票' => 'Stock',
