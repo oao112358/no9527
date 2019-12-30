@@ -94,8 +94,8 @@ class PttService
     # 組成送出的字串
     rlt = kanban + "\n\n"
     outputList.each do |i|
-      rlt << i[:popularity] + ' ' + i[:title] + "\n" + i[:url] + "\n\n"
-      # rlt << i[:popularity] + ' [' + i[:date] + '] ' + i[:title] + "\n" + i[:url] + "\n\n"
+      # rlt << i[:popularity] + ' ' + i[:title] + "\n" + i[:url] + "\n\n"
+      rlt << i[:popularity] + ' [' + i[:date] + '] ' + i[:title] + "\n" + i[:url] + "\n\n"
     end
 
     return rlt

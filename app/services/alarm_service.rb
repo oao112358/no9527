@@ -16,20 +16,24 @@ class AlarmService
     client.push_message('C509a0f264fe54b6957e97e53251ae409', message)
   end
 
-  def ptt(kanban)
-    service = PttService.new(kanban)
+  def ptt(kanban_1, kanban_2)
+    service_1 = PttService.new(kanban_1)
+    service_2 = PttService.new(kanban_2)
+    rlt = service_1.ptt + service_2.ptt
     message = {
       type: "text",
-      text: service.ptt
+      text: rlt
     }
     client.push_message('C509a0f264fe54b6957e97e53251ae409', message)
   end
 
-  def ptt_Lai(kanban)
-    service = PttService.new(kanban)
+  def ptt_Lai(kanban_1, kanban_2)
+    service_1 = PttService.new(kanban_1)
+    service_2 = PttService.new(kanban_2)
+    rlt = service_1.ptt + service_2.ptt
     message = {
       type: "text",
-      text: service.ptt
+      text: rlt
     }
     client.push_message('U2584df52f0d763c2ed68aea140533e0b', message)
   end
